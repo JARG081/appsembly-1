@@ -76,7 +76,7 @@ export const AdminPage = () => {
 
   const onSubmitAssembly = async (formData) => {
     try {
-      await onSubmitAssemblyHelper(formData, token);
+      await onSubmitAssemblyHelper(formData, token,null,"http://localhost:8080/create/assembly");
       setAssemblies(await getAssembliesHelper({ url: "http://localhost:8080/get/assembly", token }));
       setSuccessfulAssembly(true);
       reset();
@@ -106,12 +106,12 @@ export const AdminPage = () => {
             <div className="p-3 w-full">
               <DashboardCard title={"Promedio de asistencia"} customClass={"mb-4 bg-white flex justify-center w-full rounded-xl h-[225px]"}/>  
             </div>
-
             <div className="p-3 w-full">
               <DashboardCard title={"Asambleas creadas"} customClass={"mb-2 px-1 overflow-y-auto bg-white flex flex-col text-center w-full rounded-xl h-[225px]"}>
                   {assemblies && assemblies.map(assembly => (
-                    <AssemblyFragment key={assembly.assemblyID} assembly={assembly}/>
-                  ))}
+                      <AssemblyFragment key={assembly.assemblyID} assembly={assembly} successfulAssembly={successfulAssembly} handleSuccessful={handleSuccessful}/>
+                    ))
+                  }
               </DashboardCard>
             </div>
 

@@ -3,7 +3,6 @@ import { RiCloseLine } from "react-icons/ri";
 
 
 export const FormAssemblyCard = ({ register, handleSubmit, handleShowForm, errors, successfulAssembly, onSubmitHelper }) => {
-    console.log("El handleSubmit es",handleSubmit);
   return(
     <>
         <div className="right-0 flex justify-end p-2">

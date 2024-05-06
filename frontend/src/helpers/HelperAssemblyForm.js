@@ -1,7 +1,6 @@
-export const onSubmitAssemblyHelper = async (formData, token, handleSuccessful) => {
+export const onSubmitAssemblyHelper = async (formData, token, handleSuccessful, url) => {
     try {
-      console.log("ESTOY TRATANDO DE ENVIAR EL CREAR ASAMBLEA")
-      const response = await fetch("http://localhost:8080/create/assembly", {
+      const response = await fetch(`${url}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -11,7 +10,7 @@ export const onSubmitAssemblyHelper = async (formData, token, handleSuccessful) 
       });
 
       if (response.ok) {
-        console.log(handleSuccessful()); 
+        handleSuccessful()
       }
     } catch (error) {
       console.log("Hubo un error: " + error);

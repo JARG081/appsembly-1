@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import appsembly.appsembly.entities.AssemblyEntity;
@@ -46,7 +47,9 @@ public class AdminController {
     }
 
     @GetMapping("get/questions")
-    private ResponseEntity<List<QuestionEntity>> getQuestions(@RequestBody AssemblyQuestionDTO questions) {
+    private ResponseEntity<List<QuestionEntity>> getQuestions(@RequestParam("assemblyID") String question) {
+        AssemblyQuestionDTO questions = new AssemblyQuestionDTO();
+        questions.setAssemblyID(question);
         return new ResponseEntity<>(questionService.findAllQuestions(questions), HttpStatus.OK);
     }
 

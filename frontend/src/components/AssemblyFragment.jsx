@@ -1,30 +1,21 @@
+/* eslint-disable react/prop-types */
 import { useState } from "react";
-import { QuestionForm } from "../cards/QuestionForm";
-import { useForm } from "react-hook-form";
-import { HelperQuestionForm } from "../helpers/HelperQuestionForm";
+import { QuestionCard } from "../cards/admin/QuestionCard";
+import { SuccessfulCard } from "../cards/SuccessfulCard";
+import { ShowCard } from "../cards/ShowCard";
 
-export const AssemblyFragment = ({ assembly }) => {
-  const token = "";
+export const AssemblyFragment = ({ assembly, successfulAssembly,handleSuccessful }) => {
 
-  const { register: registerQuestion, handleSubmit: handleSubmitQuestion, formState: { errors: errorQuestion }, watch, reset } = useForm();
   const [showQuestionForm, setShowQuestionForm] = useState(false);
 
   const handleShowQuestionForm = () => {
     setShowQuestionForm(!showQuestionForm);
   }
 
-  const formQuestionProps = {
-    assembly,
-    registerQuestion,
-    handleSubmitQuestion,
-    handleShowQuestionForm,
-    errorQuestion,
-    token
-  };
 
   return (
     <>
-      <div key={assembly.assemblyID} className="hover:bg-slate-300  rounded-xl border-2 mb-2 py-1">
+      <div className="hover:bg-slate-300  rounded-xl border-2 mb-2 py-1">
         <button onClick={handleShowQuestionForm} className="grid grid-cols-2 w-full items-center ">
           <div className="flex justify-start pl-4">
             <p>{assembly.title}</p>
@@ -34,12 +25,13 @@ export const AssemblyFragment = ({ assembly }) => {
             <p>Estado: {assembly.status ? "Activa" : "Finalizada"}</p>
           </div>
         </button>
+        <ShowCard show={showQuestionForm}>
+          <SuccessfulCard text={"Pregunta creada exitosamente"} show={successfulAssembly}/>
+          <div className="bg-white rounded-lg m-4">
+            <QuestionCard  assembly={assembly} successfulAssembly={successfulAssembly} handleSuccessful={handleSuccessful} handleShowForm={handleShowQuestionForm} />
+          </div>
+        </ShowCard>
       </div>
-      {showQuestionForm && (
-        <div className="fixed inset-0 flex pt-36 flex-col items-center justify-en bg-black bg-opacity-50">
-          <QuestionForm {...formQuestionProps} />
-        </div>
-      )}
     </>
   )
 }

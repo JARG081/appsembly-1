@@ -40,6 +40,6 @@ public class UserEntity {
     @OneToMany(mappedBy = "user")
     private List<AttendanceEntity> attendance;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "id.user")
     private List<VoteEntity> vote;
 }

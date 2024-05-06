@@ -25,7 +25,7 @@ public class QuestionEntity {
 
     private String questionText;
 
-    @OneToMany(mappedBy = "question")
+    @OneToMany(mappedBy = "id.question")
     private List<VoteEntity> vote;
 
     @ManyToOne
