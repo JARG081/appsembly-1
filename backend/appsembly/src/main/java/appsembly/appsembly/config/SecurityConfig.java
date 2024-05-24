@@ -31,18 +31,26 @@ public class SecurityConfig {
                                 .authorizeHttpRequests(
                                                 authRequest -> authRequest
                                                                 .requestMatchers("/auth/**").permitAll()
-                                                                .requestMatchers("user/all").hasRole("ADMIN")
+                                                                .requestMatchers(
+                                                                                "user/**",
+                                                                                "/assembly/create",
+                                                                                "/question/create")
+                                                                .hasRole("ADMIN")
                                                                 .anyRequest().permitAll())
+
                                 .sessionManagement(
                                                 sessionManager -> sessionManager
                                                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
                                 .addFilterBefore(new JWTAuthorizationFilter(jwtUtilityService),
                                                 UsernamePasswordAuthenticationFilter.class)
+
                                 .exceptionHandling(exceptionHandling -> exceptionHandling
                                                 .authenticationEntryPoint((request, response, authException) -> {
                                                         response.sendError(HttpServletResponse.SC_UNAUTHORIZED,
                                                                         "Unauthorized");
                                                 }))
+
                                 .build();
 
         }

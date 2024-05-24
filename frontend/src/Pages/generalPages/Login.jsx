@@ -1,17 +1,20 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { UserContext } from "../../context/UserContext";
 
 import { useNavigate } from "react-router-dom";
+import { ErrorCard } from "../../cards/ErrorCard";
 
 export const Login = () => {
   
   const navigate = useNavigate();
   const { register:registerLogin,handleSubmit:handleSubmitLogin, formState: { errors: errorLogin } } = useForm();
   const { setUser } = useContext(UserContext);
+  const [loginError, setLoginError] = useState(false);
 
   const onSubmitLogin = async (formData) => {
     try {
+      setLoginError(false);
       const response = await fetch("http://localhost:8080/auth/login", {
         method: "POST",
         headers: {
@@ -30,14 +33,21 @@ export const Login = () => {
         } else {
           navigate("/admin");
         }
+      } else {
+        setLoginError(true); // Establece el mensaje de error si la respuesta no es exitosa
       }
     } catch (error) {
       console.log("Hubo un error: " + error);
     }
   };
+
+  const handleCloseError = ()=>{
+    setLoginError(!loginError);
+  }
+
   return (
     <>
-      <section className="bg-slate-900 flex flex-col md:flex-row h-screen items-center">
+      <section className="bg-slate-900 flex flex-col md:flex-row h-screen justify-center ">
 
         {/* <Link to="/private" className="bg-red-500 text-6xl">RUTA PRIVADA</Link> */}
         <div className="hidden lg:block w-full md:w-1/2 xl:w-2/3 h-screen">
@@ -46,7 +56,6 @@ export const Login = () => {
 
         <div className=" w-full md:max-w-md lg:max-w-full md:mx-auto  md:w-1/2 xl:w-1/3  px-6 lg:px-4 xl:px-12
               flex items-center justify-center">
-
           <div className="bg-white w-full pb-8 border-2 shadow-slate-800 shadow-lg h-100 rounded-lg">
 
             <h1 className="text-center text-4xl font-normal md:text-3xl leading-tight mt-12">Inicia sesión</h1>
@@ -89,11 +98,14 @@ export const Login = () => {
                 <a href="#" className="text-sm font-semibold text-gray-700 hover:text-blue-700 focus:text-blue-700">Se te olvidó tu contrase{a?</a>
               </div> */}
 
-              <div className="px-8">
+              <div className="px-8 mb-5">
                 <button type="submit" className="w-full block bg-blue-500 hover:bg-blue-4900 focus:bg-blue-800 hover:shadow-xl  text-white font-semibold rounded-lg
                     py-3 mt-6">
                         Log In
                 </button>
+              </div>
+              <div className="px-8">
+                {loginError && <ErrorCard handleClose={handleCloseError}/>}
               </div>
             </form>
 

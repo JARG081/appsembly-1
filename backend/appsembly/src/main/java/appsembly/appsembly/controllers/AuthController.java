@@ -23,12 +23,12 @@ public class AuthController {
     private IAuthService authService;
 
     @PostMapping("/register")
-    private ResponseEntity<ResponseDTO> addUser(@RequestBody UserEntity user) throws Exception {
+    public ResponseEntity<ResponseDTO> addUser(@RequestBody UserEntity user) throws Exception {
         return new ResponseEntity<>(authService.register(user), HttpStatus.OK);
     }
 
     @PostMapping("/login")
-    private ResponseEntity<HashMap<String, String>> login(@RequestBody LoginDTO loginRequest) throws Exception {
+    public ResponseEntity<HashMap<String, String>> login(@RequestBody LoginDTO loginRequest) throws Exception {
 
         HashMap<String, String> login = authService.login(loginRequest);
 
@@ -37,5 +37,11 @@ public class AuthController {
         } else {
             return new ResponseEntity<>(authService.login(loginRequest), HttpStatus.UNAUTHORIZED);
         }
+    }
+
+    @PostMapping("/new-password")
+    public ResponseEntity<ResponseDTO> changePassword(@RequestBody LoginDTO registerRequest) throws Exception {
+
+        return null;
     }
 }

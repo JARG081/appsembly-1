@@ -12,16 +12,17 @@ export const User = () => {
     }
   
     return (
-    <div className="min-h-screen flex flex-wrap md:grid grid-col-1 md:grid-col-3 lg:grid-cols-6 ">
-        <div className="col-span-5">
+    <div className="h-screen grid grid-cols-1 lg:grid-cols-6">
+        <div className="md:lg-col-span-4 lg:col-span-5 ">
             <Header />
             <ContentUser />
         </div>
-        <Sidebar sidebar={sidebar} />
+          <Sidebar sidebar={sidebar} />
+          <button onClick={handleSidebar} className="block fixed bottom-4 right-4 bg-blue-500 p-4 text-white rounded-full text-2xl lg:hidden">
+              {sidebar ? <GrClose />:<GrMenu />}
+          </button>
 
-        <button onClick={handleSidebar} className="block fixed  bottom-4 right-4 bg-blue-500 p-4 text-white rounded-full text-2xl lg:hidden ">
-          {sidebar ? <GrClose />:<GrMenu />}
-        </button>
+
     </div>
   )
 }

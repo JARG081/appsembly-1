@@ -4,7 +4,7 @@ export const ShowCard = ({show, children}) => {
     <>
         {
             show && (
-                <div className="fixed inset-0 flex pt-24 flex-col items-center justify-start bg-black bg-opacity-50">
+                <div className="fixed inset-0 flex pt-24 flex-col items-center justify-start bg-black backdrop-blur-sm bg-opacity-75">
                     {children}
                 </div>
             )

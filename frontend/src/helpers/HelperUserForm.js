@@ -13,6 +13,10 @@ export const onSubmitUserHelper = async (formData, token, handleSuccessful,reset
         handleSuccessful();
         reset();
       }
+      
+      console.log("El response.text es: " + JSON.stringify(response));
+
+
     } catch (error) {
       console.log("Hubo un error: " + error);
     }

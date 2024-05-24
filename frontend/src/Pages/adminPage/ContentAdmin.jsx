@@ -15,6 +15,7 @@ import { useAssemblies } from "../../hooks/useAssemblies";
 import { getAssembliesHelper } from "../../helpers/GetAssemblies";
 import { UserContext } from "../../context/UserContext";
 import { formPropsHelper } from "../../helpers/formPropsHelper";
+import { SearchUserCard } from "../../cards/admin/SearchUserCard";
 
 export const AdminPage = () => {
   const {user} = useContext(UserContext);
@@ -37,9 +38,13 @@ export const AdminPage = () => {
 
   //Mostrar la notificación de proceso completado
   const [successfulAssembly, setSuccessfulAssembly] = useState(false);
+  
+  //
+  const [showFormSearchUser, setShowFormSearchUser] = useState(false);
+
 
   // Variable para almacenar las asambleas
-  const [assemblies,setAssemblies] = useAssemblies({url:"http://localhost:8080/get/assembly"});
+  const [assemblies,setAssemblies] = useAssemblies({url:"http://localhost:8080/assembly/all"});
   console.log("LAS ASSEMBLIES SON: ", assemblies)
 
   useEffect(() => {
@@ -69,6 +74,10 @@ export const AdminPage = () => {
   const handleShowFormUpdatesUser = () => {
     setShowFormUpdateUser(!showFormUpdateUser);
   };
+  
+  const handleShowFormSearchUser = () => {
+    setShowFormSearchUser(!showFormSearchUser);
+  };
 
   const handleSuccessful = () => {
     setSuccessfulAssembly(!successfulAssembly);
@@ -76,8 +85,8 @@ export const AdminPage = () => {
 
   const onSubmitAssembly = async (formData) => {
     try {
-      await onSubmitAssemblyHelper(formData, token,null,"http://localhost:8080/create/assembly");
-      setAssemblies(await getAssembliesHelper({ url: "http://localhost:8080/get/assembly", token }));
+      await onSubmitAssemblyHelper(formData, token,null,"http://localhost:8080/assembly/create");
+      setAssemblies(await getAssembliesHelper({ url: "http://localhost:8080/assembly/all", token }));
       setSuccessfulAssembly(true);
       reset();
     } catch (error) {
@@ -85,21 +94,21 @@ export const AdminPage = () => {
     }
   };
 
-  const formUpdateUser = formPropsHelper(registerUser,handleSubmitUser,handleShowFormUpdatesUser,errorsUser,successfulAssembly,(formData) => onSubmitUserHelper(formData,token,handleSuccessful))
-  const formDeleteProps = formPropsHelper(registerUser, handleSubmitUser,handleShowFormDeleteUser,errorsUser,successfulAssembly,(formData) => onSubmitUserHelper(formData,token,handleSuccessful));
-  const formUserProps = formPropsHelper(registerUser,handleSubmitUser,handleShowFormAddUser,errorsUser,successfulAssembly,(formData) => onSubmitUserHelper(formData,token,handleSuccessful,resetUser,"POST","http://localhost:8080/create/user"))
+  const formUpdateUser = formPropsHelper(registerUser,handleSubmitUser,handleShowFormUpdatesUser,errorsUser,successfulAssembly,(formData) => onSubmitUserHelper(formData,token,handleSuccessful,resetUser,"POST","http://localhost:8080/user/update"))
+  const formDeleteProps = formPropsHelper(registerUser, handleSubmitUser,handleShowFormDeleteUser,errorsUser,successfulAssembly,(formData) => onSubmitUserHelper(formData,token,handleSuccessful,resetUser,"POST","http://localhost:8080/user/create"));
+  const formUserProps = formPropsHelper(registerUser,handleSubmitUser,handleShowFormAddUser,errorsUser,successfulAssembly,(formData) => onSubmitUserHelper(formData,token,handleSuccessful,resetUser,"POST","http://localhost:8080/user/create"))
   const formAssemblyProps = formPropsHelper(registerAssembly,handleSubmitAssembly,handleShowForm,errorsAssembly,successfulAssembly,onSubmitAssembly)
 
   return (
     <>
       <div className="p-4 lg:p-10 bg-gray-100">
         {/* Title */}
-        <div className={`mb-2 md:justify-center ${showFormAssembly ? "blur-sm" : ""}`}>
+        <div className={`mb-2 md:justify-center `}>
           <h1 className="text-3xl font-semibold">TABLERO DE ADMINISTRACIÓN</h1>
         </div>
 
         {/* Cards */}
-        <div className={`flex flex-col md:grid md:grid-cols-2 gap-2 ${showFormAssembly ? "blur-sm" : ""}`}>
+        <div className={`flex flex-col md:grid md:grid-cols-2 gap-2`}>
           {/* columna izquierda del tablero */}
           <div className="col-span-1 bg-gray-200">
             
@@ -147,7 +156,7 @@ export const AdminPage = () => {
                   Eliminar usuario
                 </button>
                 <button 
-                  onClick={handleShowFormUpdatesUser}
+                  onClick={handleShowFormSearchUser}
                   className="bg-gray-100 w-[300px] md:w-[450px] text-2xl py-1 rounded-xl hover:bg-red-600 hover:border-4 hover:border-red-200 hover:text-slate-100 hover:font-semibold font-normal border-2 border-gray-300">
                   Actualizar usuario
                 </button>
@@ -183,11 +192,17 @@ export const AdminPage = () => {
               <DeleteUserCard {...formDeleteProps} />
             </div>
         </ShowCard>
-        
+
+        <ShowCard show={showFormSearchUser}>
+            <div className="bg-white rounded-lg m-4">
+              <SearchUserCard handleShowForm={handleShowFormSearchUser}/>
+            </div>
+        </ShowCard>
+
         <ShowCard show={showFormUpdateUser}>
             <SuccessfulCard text={"Usuario eliminado exitosamente"} show={successfulAssembly} />
             <div className="bg-white rounded-lg m-4">
-              <UpdateUserCard {...formUpdateUser}  />
+              <UpdateUserCard handleShowForm={handleShowFormUpdatesUser} successfulAssembly={successfulAssembly} />
             </div>
         </ShowCard>
 

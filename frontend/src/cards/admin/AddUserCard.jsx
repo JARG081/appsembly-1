@@ -64,7 +64,7 @@ export const AddUserCard = ({ register, handleSubmit, handleShowForm, errors, su
               Cédula
             </label>
             <input
-              type="number"
+              type="text"
               {...register('personalCode', {
                 required: 'Este campo es requerido',
               })}

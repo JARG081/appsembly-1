@@ -6,6 +6,7 @@ import { Admin } from "./Admin";
 import { User } from "./User";
 import { Error } from "./Pages/generalPages/Error";
 import { Login } from "./Pages/generalPages/Login";
+import { Vote } from "./Pages/UserPage/Vote";
 
 export const App = () => {
   const { user, setUser } = useContext(UserContext);
@@ -29,12 +30,15 @@ export const App = () => {
           
           <Route element={<ProtectedRoute  isAllowed={!!user && user.role.includes('USER')} />}>
             <Route path="/user" element={<User/>} />
+            <Route path="/user/assemblyId/:assemblyId" element={<Vote />} />
           </Route>  
+          
           
           <Route element={<ProtectedRoute  isAllowed={!!user && user.role.includes('ADMIN')} />}>
             <Route path="/admin" element={<Admin/>} />
           </Route>  
           
+
         </Routes>
       </BrowserRouter>
   )

@@ -2,7 +2,6 @@ import { RiLogoutBoxRLine } from "react-icons/ri";
 import { BsNut } from "react-icons/bs";
 import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
-import { set } from "react-hook-form";
 
 export const Sidebar = ({ sidebar }) => {
   const { setUser } = useContext(UserContext);
@@ -16,7 +15,7 @@ export const Sidebar = ({ sidebar }) => {
       <div
         className={`fixed top-0 ${
           sidebar ? "right-0" : "-right-full"
-        } md:w-[40%] lg:w-full shadow-2xl transition-all duration-300 bg-white w-full h-full overflow-y-scroll col-span-1 p-8 border-l lg:overflow-y-hidden lg:static `}
+        } md:w-[40%] lg:w-full shadow-2xl transition-all duration-300 bg-green-500 w-full h-full overflow-y-scroll col-span-1 md:col-span-2 lg:col-span-1 p-8 border-l lg:overflow-y-hidden lg:static `}
       >
         {/* logotipo */}
         <div className="text-center p-8">

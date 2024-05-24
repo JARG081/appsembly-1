@@ -1,4 +1,4 @@
-export const getAssembliesHelper = async ({url, token, dataBoy}) => {
+export const getAssembliesHelper = async ({url, token}) => {
 
     try {
         const response = await fetch(url, {
@@ -7,7 +7,6 @@ export const getAssembliesHelper = async ({url, token, dataBoy}) => {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify(dataBoy)
         });
 
         if (!response.ok) {

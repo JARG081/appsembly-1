@@ -1,7 +1,14 @@
 /* eslint-disable react/prop-types */
+import { useState } from "react";
 import { RiCloseLine } from "react-icons/ri";
 
-export const UpdateUserCard = ({ register, handleSubmit, handleShowForm, errors, successfulAssembly, onSubmitHelper }) => {
+export const UpdateUserCard = ({ handleShowForm, successfulAssembly}) => {
+    
+    const [user, setUser] = useState();
+
+    const search = ()=>{
+        
+    }
     return(
         <>
             {/* close card */}
@@ -13,9 +20,9 @@ export const UpdateUserCard = ({ register, handleSubmit, handleShowForm, errors,
             </div>
             
             {/* card title */}
-            <h1 className="text-center text-3xl">Actualizando usuario</h1>
+            <h1 className="text-center text-3xl">Busca el usuario</h1>
             
-            <form onSubmit={handleSubmit(onSubmitHelper)} className={`px-12 py-6 mx-auto max-w-xl flex flex-col items-start justify-between ${successfulAssembly && "cursor-not-allowed"}  `}>
+            {/* <form  className={`px-12 py-6 mx-auto max-w-xl flex flex-col items-start justify-between ${successfulAssembly && "cursor-not-allowed"}  `}>
                                    
                 <div className="mb-4 w-full">
                     <label htmlFor="lastName" className="text-blue-500 mb-2">
@@ -35,7 +42,7 @@ export const UpdateUserCard = ({ register, handleSubmit, handleShowForm, errors,
                     Buscar usuario
                 </button>
             
-            </form>
+            </form> */}
         </>
       )
 }

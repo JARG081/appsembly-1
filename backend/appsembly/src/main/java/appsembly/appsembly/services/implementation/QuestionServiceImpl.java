@@ -11,7 +11,6 @@ import appsembly.appsembly.repositories.AssemblyRepository;
 import appsembly.appsembly.repositories.QuestionRepository;
 // import appsembly.appsembly.repositories.UserRepository;
 import appsembly.appsembly.services.IQuestionService;
-import appsembly.appsembly.services.models.dtos.AssemblyQuestionDTO;
 import appsembly.appsembly.services.models.dtos.QuestionDTO;
 import appsembly.appsembly.services.models.dtos.ResponseDTO;
 
@@ -52,8 +51,8 @@ public class QuestionServiceImpl implements IQuestionService {
     }
 
     @Override
-    public List<QuestionEntity> findAllQuestions(AssemblyQuestionDTO assemblyQuestionDTO) {
+    public List<QuestionEntity> findAllQuestions(String assemblyID) {
 
-        return questionRepository.findAllQuestions(assemblyQuestionDTO.getAssemblyID());
+        return questionRepository.findAllQuestions(assemblyID);
     }
 }

@@ -26,11 +26,15 @@ public class UserEntity {
 
     private String lastName;
 
-    private String email;
-
     private String password;
 
-    // private String personalCode;
+    private boolean active;
+
+    @Column(unique = true)
+    private String email;
+
+    @Column(unique = true)
+    private String personalCode;
 
     // private Boolean status; ESTO ES PARA SABER SI EL USUARIO ESTÁ ACTIVO O NO
 
@@ -42,4 +46,8 @@ public class UserEntity {
 
     @OneToMany(mappedBy = "id.user")
     private List<VoteEntity> vote;
+
+    public Boolean getActive() {
+        return active;
+    }
 }

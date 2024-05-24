@@ -80,19 +80,48 @@ public class AuthServiceImpl implements IAuthService {
                     response.setMessage("Email already exists!");
                     return response;
                 }
-                // Agrega más comparaciones de campos relevantes según sea necesario.
             }
 
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
+
             user.setPassword(encoder.encode(user.getPassword()));
+            user.setActive(true);
             userRepository.save(user);
             response.setMessage("User created successfull!");
 
             return response;
 
         } catch (Exception e) {
-            throw new Exception(e.getMessage());
+            throw new Exception("has error: " + e.getMessage());
         }
+    }
+
+    public ResponseDTO changePassword(LoginDTO loginRequest) throws Exception {
+        ResponseDTO response = new ResponseDTO();
+        Optional<UserEntity> userDB = userRepository.findByEmail(loginRequest.getEmail());
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
+
+        if (userDB.isEmpty()) {
+            response.setNumOfErrors(response.getNumOfErrors() + 1);
+            response.setMessage("User not registered!");
+            return response;
+        }
+
+        UserEntity user = userDB.get();
+
+        String newPassword = encoder.encode(loginRequest.getPassword());
+
+        if (newPassword != user.getPassword()) {
+            user.setPassword(newPassword);
+        } else {
+            response.setNumOfErrors(response.getNumOfErrors() + 1);
+            response.setMessage("La contraseña es igual a la anterior");
+            return response;
+        }
+
+        response.setMessage("change password successfull");
+
+        return response;
     }
 
     private boolean verifyPassword(String enteredPassword, String storedPassword) {

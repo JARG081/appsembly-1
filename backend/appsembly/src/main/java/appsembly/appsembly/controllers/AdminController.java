@@ -34,39 +34,75 @@ public class AdminController {
     @Autowired
     private IUserService userService;
 
-    @PostMapping("/create/assembly")
-    private ResponseEntity<ResponseDTO> createAssembly(@RequestBody AssemblyDTO assembly) throws Exception {
-        System.out.println("CREANDO ASAMBLEA");
-        return new ResponseEntity<>(assemblyService.register(assembly), HttpStatus.OK);
-    }
+    /********* ASAMBLEAS *********/
+    // movido al controlador de asembleas
+    // @PostMapping("/create/assembly")
+    // public ResponseEntity<ResponseDTO> createAssembly(@RequestBody AssemblyDTO
+    // assembly) throws Exception {
+    // System.out.println("CREANDO ASAMBLEA");
+    // return new ResponseEntity<>(assemblyService.register(assembly),
+    // HttpStatus.OK);
+    // }
 
-    @GetMapping("/get/assembly")
-    private ResponseEntity<List<AssemblyEntity>> getAssemblies() {
-        System.out.println("Obteniendo ASAMBLEAS");
-        return new ResponseEntity<>(assemblyService.findAllAssemblies(), HttpStatus.OK);
-    }
+    // // movido al controlador de asembleas
+    // @GetMapping("/get/assembly")
+    // public ResponseEntity<List<AssemblyEntity>> getAssemblies() {
+    // System.out.println("Obteniendo ASAMBLEAS");
+    // return new ResponseEntity<>(assemblyService.findAllAssemblies(),
+    // HttpStatus.OK);
+    // }
 
-    @GetMapping("get/questions")
-    private ResponseEntity<List<QuestionEntity>> getQuestions(@RequestParam("assemblyID") String question) {
-        AssemblyQuestionDTO questions = new AssemblyQuestionDTO();
-        questions.setAssemblyID(question);
-        return new ResponseEntity<>(questionService.findAllQuestions(questions), HttpStatus.OK);
-    }
+    /****************************************** ******************************************/
+    /****************************************** ******************************************/
 
-    @PostMapping("/create/question")
-    private ResponseEntity<ResponseDTO> createQuestion(@RequestBody QuestionDTO question) throws Exception {
-        return new ResponseEntity<>(questionService.create(question), HttpStatus.OK);
-    }
+    /********* PREGUNTAS *********/
+    // se pasa a ser manejas por las preguntas
+    // @GetMapping("get/questions")
+    // public ResponseEntity<List<QuestionEntity>>
+    // getQuestions(@RequestParam("assemblyID") String question) {
+    // AssemblyQuestionDTO questions = new AssemblyQuestionDTO();
+    // questions.setAssemblyID(question);
+    // return new ResponseEntity<>(questionService.findAllQuestions(question),
+    // HttpStatus.OK);
+    // }
 
-    @PostMapping("/update/user")
-    private ResponseEntity<ResponseDTO> updateUser(@RequestBody UserDTO updateUser) throws Exception {
-        // return new ResponseEntity<>(u)
-        return new ResponseEntity<>(userService.updateUser(updateUser), HttpStatus.OK);
-    }
+    // Pasa a ser manejada por question controller
+    // @PostMapping("/create/question")
+    // public ResponseEntity<ResponseDTO> createQuestion(@RequestBody QuestionDTO
+    // question) throws Exception {
+    // return new ResponseEntity<>(questionService.create(question), HttpStatus.OK);
+    // }
 
-    @PostMapping("/create/user")
-    private ResponseEntity<ResponseDTO> createUser(@RequestBody UserDTO createUserDTO) throws Exception {
-        return new ResponseEntity<>(userService.createUser(createUserDTO), HttpStatus.OK);
-    }
+    /****************************************** ******************************************/
+    /****************************************** ******************************************/
+
+    /********* USUARIO *********/
+    /* Pasan a ser manejados por el userController */
+    // @PostMapping("/update/user")
+    // public ResponseEntity<ResponseDTO> updateUser(@RequestBody UserDTO
+    // updateUser) throws Exception {
+    // // return new ResponseEntity<>(u)
+    // return new ResponseEntity<>(userService.updateUser(updateUser),
+    // HttpStatus.OK);
+    // }
+
+    // @PostMapping("/create/user")
+    // public ResponseEntity<ResponseDTO> createUser(@RequestBody UserDTO
+    // createUserDTO) throws Exception {
+    // System.out.println("El personal code es: " +
+    // createUserDTO.getPersonalCode());
+    // return new ResponseEntity<>(userService.createUser(createUserDTO),
+    // HttpStatus.OK);
+    // }
+
+    // @PostMapping("/delete/user")
+    // public ResponseEntity<ResponseDTO> deleteUser(@RequestBody UserDTO
+    // deleteUserDTO) throws Exception {
+    // System.out.println("El personalcode obtenido desde el frontend: " +
+    // deleteUserDTO.getPersonalCode());
+    // return new
+    // ResponseEntity<>(userService.deleteUser(deleteUserDTO.getPersonalCode()),
+    // HttpStatus.OK);
+    // }
 
 }

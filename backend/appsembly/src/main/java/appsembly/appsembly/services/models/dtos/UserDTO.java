@@ -16,4 +16,7 @@ public class UserDTO {
     private String role;
 
     private String personalCode;
+
+    private Boolean active;
+
 }

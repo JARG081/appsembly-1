@@ -5,11 +5,11 @@ import {RiCheckboxBlankCircleFill, RiArrowDownSLine} from "react-icons/ri";
 export const Header = () => {
   return (
     <>
-    <header className="flex flex-col md:flex-row items-center justify-end p-4 w-full bg-gray-50">
+    <header className="flex flex-col md:flex-row items-center justify-center md:justify-end w-full h-[10%] md:h-[15%] bg-slate-100">
             
             {/* Notifications */}
-            <nav className="w-full flex mb-5 md:mb-0 justify-center md:justify-end md:w-[25%] lg:w-[20%] ">
-              <ul className="flex items-center gap-1">
+            <nav className="w-full flex md:mb-0 justify-center  md:justify-end md:w-[25%] lg:w-[20%]">
+              <ul className="flex items-end gap-1  p-5">
                 <li>
                   <a href="#" className="relative">
                     <IoNotificationsOutline />
