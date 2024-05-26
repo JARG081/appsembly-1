@@ -46,7 +46,7 @@ public class VoteServiceImpl implements IVoteService {
             }
         }
 
-        QuestionEntity question = questionRepository.findById(Long.parseLong(voteDTO.getQuestionID())).get();
+        QuestionEntity question = questionRepository.findById(voteDTO.getQuestionID()).get();
         UserEntity user = userRepository.findById(Long.parseLong(voteDTO.getUserID())).get();
 
         // newVote.setQuestion(question);

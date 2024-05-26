@@ -15,7 +15,7 @@ export const Sidebar = ({ sidebar }) => {
       <div
         className={`fixed top-0 ${
           sidebar ? "right-0" : "-right-full"
-        } md:w-[40%] lg:w-full shadow-2xl transition-all duration-300 bg-green-500 w-full h-full overflow-y-scroll col-span-1 md:col-span-2 lg:col-span-1 p-8 border-l lg:overflow-y-hidden lg:static `}
+        } md:w-[40%] lg:w-full shadow-2xl transition-all duration-300 bg-white w-full h-full overflow-y-scroll col-span-1 md:col-span-2 lg:col-span-1 p-8 border-l lg:overflow-y-hidden lg:static `}
       >
         {/* logotipo */}
         <div className="text-center p-8">
@@ -37,7 +37,7 @@ export const Sidebar = ({ sidebar }) => {
               <li>
                 <a
                   href="#"
-                  className="flex bg-slate-100 pointer-events-none disabled:cursor-not-allowed  items-center gap-2 hover:bg-sky-600 p-4 text-gray-900 hover:text-white rounded-lg transition-colors"
+                  className="flex bg-slate-100 pointer-events-none items-center gap-2 hover:bg-sky-600 p-4 text-gray-900 hover:text-white rounded-lg transition-colors"
                 >
                   configuración
                   <BsNut />

@@ -166,11 +166,10 @@ public class UserServiceImpl implements IUserService, UserDetailsService {
             ResponseDTO response = new ResponseDTO();
 
             UserEntity newUser = new UserEntity();
-
             if ((userRepository.findUser(createUserDTO.getPersonalCode()).isPresent())) {
 
                 response.setNumOfErrors(response.getNumOfErrors() + 1);
-                response.setMessage("This personal code already exists");
+                response.setMessage("This personal code already exists sadasdasd");
                 return response;
 
             } else {
@@ -187,7 +186,7 @@ public class UserServiceImpl implements IUserService, UserDetailsService {
                 newUser.setEmail(createUserDTO.getEmail().toLowerCase());
             }
 
-            if ((createUserDTO.getFirstName() != null) && (createUserDTO.getLastName() != null)) {
+            if ((createUserDTO.getFirstName().isEmpty()) && (createUserDTO.getLastName().isEmpty())) {
 
                 response.setNumOfErrors(response.getNumOfErrors() + 1);
                 response.setMessage("The first and last name cannot be empty");

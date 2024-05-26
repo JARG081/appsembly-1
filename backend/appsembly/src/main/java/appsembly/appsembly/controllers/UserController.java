@@ -35,12 +35,11 @@ public class UserController {
     @PostMapping("/create")
     public ResponseEntity<ResponseDTO> createUser(@RequestBody UserDTO createUserDTO) throws Exception {
         ResponseDTO response = userService.createUser(createUserDTO);
-        System.out.println("El response es: " + response.getNumOfErrors());
         if (response.getNumOfErrors() != 0) {
             return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+        } else {
+            return new ResponseEntity<>(response, HttpStatus.OK);
         }
-
-        return new ResponseEntity<>(userService.createUser(createUserDTO), HttpStatus.OK);
     }
 
     // ✅✅✅

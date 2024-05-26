@@ -1,10 +1,12 @@
 package appsembly.appsembly.services.models.dtos;
 
+import java.util.UUID;
+
 import lombok.Data;
 
 @Data
 public class VoteDTO {
     String option;
-    String questionID;
+    UUID questionID;
     String userID;
 }

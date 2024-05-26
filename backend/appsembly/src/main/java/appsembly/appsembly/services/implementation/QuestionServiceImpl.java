@@ -32,12 +32,16 @@ public class QuestionServiceImpl implements IQuestionService {
 
             // UserEntity user =
             // userRepository.findById(Long.parseLong(questionDTO.getUserID())).get();
-            AssemblyEntity assembly = assemblyRepository.findById(Long.parseLong(questionDTO.getAssemblyID())).get();
+            System.out.println("El assemblyID es: " + questionDTO.getAssemblyID());
 
+            AssemblyEntity assembly = assemblyRepository.findById(questionDTO.getAssemblyID()).get();
+
+            System.out.println("El assembly es: " + assembly.getProposal());
             ResponseDTO response = new ResponseDTO();
 
             QuestionEntity question = new QuestionEntity();
 
+            question.setQuestionID(questionDTO.getQuestionID());
             question.setAssembly(assembly);
             System.out.println("La pregunta es: " + questionDTO.getQuestion());
             question.setQuestionText(questionDTO.getQuestion());

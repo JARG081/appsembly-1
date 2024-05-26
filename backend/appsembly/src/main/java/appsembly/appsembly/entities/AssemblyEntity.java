@@ -8,6 +8,7 @@ import jakarta.persistence.OneToMany;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -24,9 +25,8 @@ import lombok.Data;
 @Table(name = "assembly")
 public class AssemblyEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JoinColumn(name = "assembly_id")
-    private Long assemblyID;
+    private UUID assemblyID;
 
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd/MM/yyyy")
@@ -45,4 +45,7 @@ public class AssemblyEntity {
     @JsonBackReference
     private List<QuestionEntity> questions;
 
+    public AssemblyEntity() {
+        this.assemblyID = UUID.randomUUID();
+    }
 }

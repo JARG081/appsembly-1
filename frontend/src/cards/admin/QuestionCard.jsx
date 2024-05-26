@@ -3,11 +3,12 @@ import Stomp from 'stompjs';
 import SockJS from 'sockjs-client';
 import { RiCloseLine } from "react-icons/ri";
 
-export const QuestionCard = ({ handleSuccessful,handleShowForm,successfulAssembly, assembly }) => {
+export const QuestionCard = ({ handleSuccessful, handleShowForm, successfulAssembly, assembly }) => {
   const [stompClient, setStompClient] = useState(null);
   const [question, setQuestion] = useState('');
   const [answers, setAnswers] = useState(['sí', 'no']);
   const [assemblyID, setAssemblyID] = useState(`${assembly.assemblyID}`);
+  const [disabledBtn, setDisabledBtn] = useState(false);
 
   useEffect(() => {
     const connectWebSocket = () => {
@@ -35,28 +36,50 @@ export const QuestionCard = ({ handleSuccessful,handleShowForm,successfulAssembl
 
   const sendQuestion = () => {
     if (stompClient && question.trim() !== '') {
+      
       const message = {
         type: 'question',
         content: question,
         options: answers,
-        assemblyID: assemblyID
+        assemblyID: assemblyID,
+        time: 20
       };
+
       stompClient.send('/send/answer', {}, JSON.stringify(message));
+      
       setQuestion('');
+      setDisabledBtn(true); // Deshabilita el botón al enviar la pregunta
+      setTimeout(() => {
+        setDisabledBtn(false); // Habilita nuevamente el botón después de 60 segundos
+      }, 150000); // 60 segundos en milisegundos
+
     }
   };
 
   return (
     <>
-        <div className="flex justify-end mb-0.5">
-          <RiCloseLine
-            onClick={handleShowForm}
-            className="text-4xl rounded-full text-purple-800 shadow-md shadow-neutral-800 p-0 hover:text-purple-500 hover:cursor-pointer"
+      <div className="flex flew-row justify-end mb-0.5 p-2">
+        <RiCloseLine
+          onClick={handleShowForm}
+          className="text-4xl rounded-full text-purple-800 shadow-md shadow-neutral-800 p-0 hover:text-red-600 hover:cursor-pointer"
+        />
+      </div>
+      <div className="flex flex-col items-center justify-center p-4 w-[350px] md:w-[700px]">
+        <div className="flex flex-col items-start w-5/6">
+        <p className="text-lg">Ingresa la pregunta</p>
+          <textarea 
+            value={question} 
+            onChange={handleInputChange} 
+            className="overflow-auto border-2 rounded-md w-full mr-2 px-2 py-1 resize-none"
+            // Ajusta el número inicial de filas
           />
+          <button 
+            onClick={sendQuestion} 
+            className={`${disabledBtn ? 'pointer-events-none bg-red-300' : ''} p-2 mt-2 hover:cursor-pointer bg-slate-200 rounded-md  self-end`}
+          >
+            {disabledBtn ? "No puedes enviar (votando) 🚫":"Enviar pregunta"}
+          </button>
         </div>
-      <div>
-        <input type="text" value={question} onChange={handleInputChange} />
-        <button onClick={sendQuestion}>Enviar pregunta</button>
       </div>
     </>
   );

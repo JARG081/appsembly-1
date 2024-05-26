@@ -1,5 +1,7 @@
 package appsembly.appsembly.controllers;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,16 +11,23 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import appsembly.appsembly.entities.AnswersEntity;
 import appsembly.appsembly.entities.Message;
+import appsembly.appsembly.services.IQuestionService;
 import appsembly.appsembly.services.IVoteService;
+import appsembly.appsembly.services.models.dtos.QuestionDTO;
 import appsembly.appsembly.services.models.dtos.ResponseDTO;
 import appsembly.appsembly.services.models.dtos.VoteDTO;
+import appsembly.appsembly.utils.StringUtils;
 
 @RestController
 public class VoteController {
 
     @Autowired
     private IVoteService voteService;
+
+    @Autowired
+    private IQuestionService questionService;
 
     @PostMapping("vote")
     public ResponseEntity<ResponseDTO> vote(@RequestBody VoteDTO vote) {
@@ -27,32 +36,41 @@ public class VoteController {
 
     @SendTo("/topic/questions")
     @MessageMapping("/answer")
-    public Message answer(Message message) {
+    public Message answer(Message message) throws Exception {
+        UUID uuidQuestion = UUID.randomUUID();
         if ("question".equals(message.getType())) {
-            // La pregunta es
-            System.out.println("La pregunta es: " + message.getContent());
-            // Procesar la respuesta
-            if (message.getOptions() != null) {
-                System.out.print("Las RESPUESTAS son: ");
-                for (String option : message.getOptions()) {
-                    System.out.print(option + ", ");
-                }
-                System.out.println();
-            } else {
-                System.out.println("No hay preguntas.");
-            }
+            QuestionDTO question = new QuestionDTO();
 
-            System.out.println("El id de la asamblea son: " + message.getAssemblyID());
-            // Aquí deberías procesar la pregunta y preparar la respuesta
+            // guardando la asamblea en la base de datos
+            question.setAssemblyID(message.getAssemblyID());
+            question.setQuestion(message.getContent());
+            question.setQuestionID(uuidQuestion);
+            questionService.create(question);
+
             Message response = new Message();
             response.setType("question");
             response.setContent(message.getContent());
             response.setOptions(message.getOptions());
             response.setAssemblyID(message.getAssemblyID());
+            response.setQuestionID(uuidQuestion);
+            response.setQuestionID(uuidQuestion);
+            response.setTime((message.getTime()) * 1000);
+
             return response;
         } else if ("answer".equals(message.getType())) {
             // Procesar la respuesta
-            System.out.println("La respuesta es: " + message.getContent());
+            System.out.println("La respuesta original es: " + message.getContent());
+            System.out.println("La respuesta del questionID es: " + message.getQuestionID());
+
+            String processText = StringUtils.quitarTildes(message.getContent()).toUpperCase();
+            VoteDTO voteDTO = new VoteDTO();
+
+            if (processText.equals(AnswersEntity.SI.toString())) {
+                System.out.println("La respuesta es SI");
+            } else if (processText.equals(AnswersEntity.NO.toString())) {
+                System.out.println("La respuesta es NO");
+
+            }
         }
         return message;
     }
