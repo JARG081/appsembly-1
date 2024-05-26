@@ -202,8 +202,9 @@ public class UserServiceImpl implements IUserService, UserDetailsService {
 
             }
 
-            if (createUserDTO.getRole().toUpperCase() != null) {
-                switch (createUserDTO.getRole()) {
+            if (createUserDTO.getRole() != null) {
+                String role = createUserDTO.getRole().toUpperCase();
+                switch (role) {
                     case "USER":
                         RolesEntity rol = RolesEntity.USER;
                         newUser.setRole(rol);
