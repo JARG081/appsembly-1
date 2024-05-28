@@ -26,7 +26,7 @@ public class AuthServiceImpl implements IAuthService {
 
     @Autowired
     private UserValidation userValidation;
-
+    // Implementación del método de inicio de sesión
     @Override
     public HashMap<String, String> login(LoginDTO loginRequest) throws Exception {
         try {
@@ -50,7 +50,7 @@ public class AuthServiceImpl implements IAuthService {
                 response.put("firstName", firstName);
                 response.put("lastName", lastName);
                 response.put("role", role);
-
+                //verifica credenciales
             } else {
                 response.put("error", "Authentication failed");
             }
@@ -63,7 +63,7 @@ public class AuthServiceImpl implements IAuthService {
             throw new Exception("Unknown error", e);
         }
     }
-
+    // Implementación del método de registro de usuarios
     @Override
     public ResponseDTO register(UserEntity user) throws Exception {
         try {
@@ -95,7 +95,7 @@ public class AuthServiceImpl implements IAuthService {
             throw new Exception("has error: " + e.getMessage());
         }
     }
-
+    // Método para cambiar la contraseña del usuario
     public ResponseDTO changePassword(LoginDTO loginRequest) throws Exception {
         ResponseDTO response = new ResponseDTO();
         Optional<UserEntity> userDB = userRepository.findByEmail(loginRequest.getEmail());
@@ -123,7 +123,7 @@ public class AuthServiceImpl implements IAuthService {
 
         return response;
     }
-
+    // Método privado para verificar si la contraseña ingresada coincide con la almacenada
     private boolean verifyPassword(String enteredPassword, String storedPassword) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         return encoder.matches(enteredPassword, storedPassword);
