@@ -27,7 +27,7 @@ import jakarta.servlet.http.HttpSession;
 @Service
 public class UserServiceImpl implements IUserService, UserDetailsService {
 
-    // no se si es composición o agreagación
+
     @Autowired
     UserRepository userRepository;
     // public class UserDTO {
@@ -47,12 +47,13 @@ public class UserServiceImpl implements IUserService, UserDetailsService {
     // private Bool active;
 
     // }
-
+    // Implementación del método para encontrar todos los usuarios
     @Override
     public List<UserDTO> findAllUsers() throws UsernameNotFoundException {
         try {
             List<UserEntity> usersEntities = userRepository.findAllUsers();
             List<UserDTO> usersDTO = new ArrayList<>();
+            // Itera sobre los usuarios encontrados y los mapea a DTOs de usuario
             for (UserEntity userEntity : usersEntities) {
                 UserDTO aux = new UserDTO();
                 aux.setId(Long.toString(userEntity.getUserID()));
@@ -66,22 +67,24 @@ public class UserServiceImpl implements IUserService, UserDetailsService {
             }
             return usersDTO;
         } catch (Exception e) {
+            // Maneja cualquier excepción y la lanza como UsernameNotFoundException
             throw new UsernameNotFoundException("Users Not Found, error: " + e);
         }
     }
 
     // private static final String REGEX =
     // "^(?=.*[!@#$%^&*()-+=])(?=.*[0-9])(?=.*[A-Z]).*$";
-
+    // Implementación del método para encontrar un usuario por su código personal
     @Override
     public UserDTO findUser(String personalCode) throws UsernameNotFoundException {
         try {
+            // Busca el usuario por su código personal en el repositorio
             Optional<UserEntity> userOptional = userRepository.findUser(personalCode);
 
             if (userOptional.isEmpty()) {
                 throw new UsernameNotFoundException("User not found");
             }
-
+            // Mapea el usuario encontrado a un DTO de usuario
             UserDTO userResponse = new UserDTO();
 
             UserEntity user = userOptional.get();
@@ -94,10 +97,11 @@ public class UserServiceImpl implements IUserService, UserDetailsService {
 
             return userResponse;
         } catch (Exception ex) {
+            // Maneja cualquier excepción y la lanza como UsernameNotFoundException
             throw new UsernameNotFoundException("Error al buscar usuario: " + ex.getMessage());
         }
     }
-
+    // Implementación del método para cargar un usuario por su nombre de usuario (email)
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
@@ -119,20 +123,20 @@ public class UserServiceImpl implements IUserService, UserDetailsService {
         }
 
     }
-
+    // Implementación del método para actualizar un usuario
     @Override
     public ResponseDTO updateUser(UserDTO updateUserDTO) {
 
         ResponseDTO response = new ResponseDTO();
-
+        
         if (updateUserDTO.getId() == null) {
             response.setNumOfErrors(response.getNumOfErrors() + 1);
             response.setMessage("not id");
             return response;
         }
-
+        // Busca el usuario a actualizar por su ID en el repositorio
         UserEntity userDB = userRepository.findById(Long.parseLong(updateUserDTO.getId())).get();
-
+        // Actualiza los campos del usuario con los datos proporcionados en el DTO
         if (updateUserDTO.getFirstName() != null) {
             userDB.setFirstName(updateUserDTO.getFirstName());
         }
@@ -159,13 +163,14 @@ public class UserServiceImpl implements IUserService, UserDetailsService {
 
         return response;
     }
-
+    // Implementación del método para crear un nuevo usuario
     @Override
     public ResponseDTO createUser(UserDTO createUserDTO) throws Exception {
         try {
             ResponseDTO response = new ResponseDTO();
 
             UserEntity newUser = new UserEntity();
+            // Verifica si ya existe un usuario con el código personal proporcionado
             if ((userRepository.findUser(createUserDTO.getPersonalCode()).isPresent())) {
 
                 response.setNumOfErrors(response.getNumOfErrors() + 1);
@@ -175,7 +180,7 @@ public class UserServiceImpl implements IUserService, UserDetailsService {
             } else {
                 newUser.setPersonalCode(createUserDTO.getPersonalCode());
             }
-
+            // Verifica si ya existe un usuario con el correo electrónico proporcionado
             if ((userRepository.findByEmail(createUserDTO.getEmail()).isPresent())) {
 
                 response.setNumOfErrors(response.getNumOfErrors() + 1);
@@ -185,7 +190,7 @@ public class UserServiceImpl implements IUserService, UserDetailsService {
             } else {
                 newUser.setEmail(createUserDTO.getEmail().toLowerCase());
             }
-
+            // Verifica que el nombre y apellido no estén vacíos
             if ((createUserDTO.getFirstName().isEmpty()) && (createUserDTO.getLastName().isEmpty())) {
 
                 response.setNumOfErrors(response.getNumOfErrors() + 1);
@@ -201,7 +206,7 @@ public class UserServiceImpl implements IUserService, UserDetailsService {
                 newUser.setLastName(createUserDTO.getLastName());
 
             }
-
+            // Configura el rol del usuario
             if (createUserDTO.getRole() != null) {
                 String role = createUserDTO.getRole().toUpperCase();
                 switch (role) {
@@ -218,36 +223,41 @@ public class UserServiceImpl implements IUserService, UserDetailsService {
                 }
 
             } else {
+                // Si no se proporciona un rol, se asigna el rol por defecto de USER
                 newUser.setRole(RolesEntity.USER);
             }
-
-            newUser.setActive(true);
-
+            // Configura el estado activo del usuario
+            newUser.setActive(true);    
+            // Codifica la contraseña del usuario antes de guardarla en la base de datos
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
             newUser.setPassword(encoder.encode(createUserDTO.getPersonalCode()));
-
+            // Guarda el nuevo usuario en el repositorio
             userRepository.save(newUser);
 
             response.setMessage("User created successful");
 
             return response;
         } catch (Exception e) {
+            // Maneja cualquier excepción y la lanza como una nueva excepción
             throw new Exception("The user could not be created: " + e.getMessage());
         }
 
     }
-
+    // Implementación del método para eliminar un usuario
     @Override
     public ResponseDTO deleteUser(String personalCode) throws Exception {
         try {
             ResponseDTO response = new ResponseDTO();
+            // Busca el usuario por su código personal en el repositorio
             UserEntity user = userRepository.findUser(personalCode).get();
             user.setActive(false);
             userRepository.save(user);
+            //confirma usuario eliminado
             response.setMessage("El usuario ha sido eliminado correctamente");
             return response;
         } catch (Exception e) {
+            // Maneja cualquier excepción y la lanza como una nueva excepción
             throw new Exception("User not found: " + e);
         }
     }
