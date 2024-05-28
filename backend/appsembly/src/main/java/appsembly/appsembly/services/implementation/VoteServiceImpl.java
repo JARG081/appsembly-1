@@ -24,15 +24,16 @@ public class VoteServiceImpl implements IVoteService {
     QuestionRepository questionRepository;
     @Autowired
     UserRepository userRepository;
-
+    // Implementación del método para registrar un voto
     @Override
     public ResponseDTO vote(VoteDTO voteDTO) {
-
+        // Crea un objeto de respuesta
         ResponseDTO response = new ResponseDTO();
+        // Crea una clave primaria compuesta para el voto
         VoteEntityPK votePK = new VoteEntityPK();
-
+        // Crea una nueva entidad de voto
         VoteEntity newVote = new VoteEntity();
-
+        // Verifica y establece la opción de voto (SI o NO)
         if (voteDTO.getOption() != null) {
             switch (voteDTO.getOption()) {
                 case "si":
@@ -45,20 +46,20 @@ public class VoteServiceImpl implements IVoteService {
                     break;
             }
         }
-
+        // Busca la pregunta y el usuario correspondientes en el repositorio
         QuestionEntity question = questionRepository.findById(voteDTO.getQuestionID()).get();
         UserEntity user = userRepository.findById(Long.parseLong(voteDTO.getUserID())).get();
 
         // newVote.setQuestion(question);
         // newVote.setUser(user);
-
+        // Configura la clave primaria compuesta con la pregunta y el usuario
         votePK.setQuestion(question);
         votePK.setUser(user);
-
+        // Configura la entidad de voto con la clave primaria compuesta
         newVote.setId(votePK);
-
+        // Guarda el voto en el repositorio
         voteRepository.save(newVote);
-
+        // Establece el mensaje de respuesta
         response.setMessage("Voto creado");
 
         return null;
